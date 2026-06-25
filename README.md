@@ -1,6 +1,6 @@
-# WanderMates MVP - Full Stack Social Travel Platform
+# WanderMeets MVP - Full Stack Social Travel Platform
 
-A complete working MVP of the WanderMates social travel platform with real-time features, interactive maps, and travel journaling.
+A complete working MVP of the WanderMeets social travel platform with real-time features, interactive maps, and travel journaling.
 
 ## 🚀 Features Implemented
 
@@ -66,7 +66,7 @@ Download and install from [postgresql.org](https://www.postgresql.org/download/w
 psql -U postgres
 
 # In PostgreSQL shell:
-CREATE DATABASE wandermates;
+CREATE DATABASE wandermeets;
 \q
 ```
 
@@ -82,7 +82,7 @@ Edit `backend/.env` with your database credentials:
 ```env
 DB_HOST=localhost
 DB_PORT=5432
-DB_NAME=wandermates
+DB_NAME=wandermeets
 DB_USER=postgres
 DB_PASSWORD=your_postgres_password
 
@@ -229,7 +229,7 @@ GET /api/recommendations/:id - Get recommendation details
 ## 🏗️ Project Structure
 
 ```
-wandermates-mvp/
+wandermeets-mvp/
 ├── backend/
 │   ├── config/
 │   │   └── database.js
@@ -292,7 +292,7 @@ sudo systemctl status postgresql  # Linux
 brew services list  # macOS
 
 # Test connection
-psql -U postgres -d wandermates
+psql -U postgres -d wandermeets
 ```
 
 ### Port Already in Use
@@ -347,7 +347,7 @@ npm run build
 
 # Backend (use process manager like PM2)
 npm install -g pm2
-pm2 start server.js --name wandermates-api
+pm2 start server.js --name wandermeets-api
 ```
 
 ## 🎯 Future Enhancements (Not in MVP)

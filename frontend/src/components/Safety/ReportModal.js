@@ -25,7 +25,7 @@ function ReportModal({ entityId, entityType, entityName, onClose }) {
         report_type: category,
         description
       });
-      alert('Report submitted. Our safety team will investigate this immediately. Thank you for keeping WanderMates safe.');
+      alert('Report submitted. Our safety team will investigate this immediately. Thank you for keeping WanderMeets safe.');
       onClose();
     } catch (err) {
       alert(err.response?.data?.error || 'Failed to submit report');

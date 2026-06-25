@@ -350,7 +350,7 @@ function MapView({ user, onLocationChange }) {
             onClick={() => setShowActivitiesList(true)}
           >
             <div className="status-dot" />
-            <span>{activities.length} WanderMates nearby</span>
+            <span>{activities.length} WanderMeets nearby</span>
           </motion.div>
         )}
       </AnimatePresence>
@@ -362,7 +362,7 @@ function MapView({ user, onLocationChange }) {
             className="activities-list-drawer"
           >
             <div className="drawer-header">
-              <h3>Nearby WanderMates</h3>
+              <h3>Nearby WanderMeets</h3>
               <button className="close-drawer" onClick={() => setShowActivitiesList(false)}><X size={20}/></button>
             </div>
             <div className="drawer-content">

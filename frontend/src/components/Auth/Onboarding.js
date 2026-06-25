@@ -193,7 +193,7 @@ function Onboarding({ user, setUser }) {
       </div>
 
       <h2>Find travelers near you</h2>
-      <p className="subheading">WanderMates shows activities happening around you in real-time. Your exact location is never shared — only the city you're in.</p>
+      <p className="subheading">WanderMeets shows activities happening around you in real-time. Your exact location is never shared — only the city you're in.</p>
 
       <div className="location-benefits">
         <div className="loc-benefit-card">
@@ -219,7 +219,7 @@ function Onboarding({ user, setUser }) {
           <div className="auth-desktop-aside desktop-view">
              <div style={{ textAlign: 'center' }}>
                 <Compass size={80} color="white" />
-                <h1 style={{ color: 'white', marginTop: '1rem' }}>WanderMates</h1>
+                <h1 style={{ color: 'white', marginTop: '1rem' }}>WanderMeets</h1>
                 <p style={{ color: 'white', opacity: 0.8 }}>Start your travel journey today.</p>
              </div>
           </div>

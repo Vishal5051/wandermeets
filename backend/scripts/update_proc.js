@@ -1,7 +1,7 @@
 const mysql = require('mysql2/promise');
 (async () => {
   try {
-    const conn = await mysql.createConnection('mysql://root:12345@localhost:3306/wandermates');
+    const conn = await mysql.createConnection('mysql://root:12345@localhost:3306/wandermeets');
     await conn.query("DROP PROCEDURE IF EXISTS sp_get_nearby_activities");
     await conn.query(`
       CREATE PROCEDURE sp_get_nearby_activities(

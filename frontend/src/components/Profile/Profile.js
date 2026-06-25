@@ -225,7 +225,7 @@ function Profile({ user, setUser, userLocation, onLogout }) {
 
             <div className="sidebar-bio">
               <h3>Bio</h3>
-              <p>{profile?.bio || "Just another WanderMate exploring the world..."}</p>
+              <p>{profile?.bio || "Just another WanderMeet exploring the world..."}</p>
             </div>
 
             <div className="sidebar-actions">
@@ -400,7 +400,7 @@ function EditProfileModal({ formData, setFormData, onSave, onClose }) {
         <div className="ep-header">
           <div className="ep-header-text">
             <h2>Edit Profile</h2>
-            <p>Customize your WanderMate identity</p>
+            <p>Customize your WanderMeet identity</p>
           </div>
           <button className="close-ep-btn" onClick={onClose}><X size={20}/></button>
         </div>

@@ -74,7 +74,7 @@ function App() {
     return (
       <div className="loading-screen">
         <div className="spinner-modern"></div>
-        <p>WanderMates is getting ready...</p>
+        <p>WanderMeets is getting ready...</p>
       </div>
     );
   }

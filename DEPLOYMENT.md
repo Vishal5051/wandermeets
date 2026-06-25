@@ -1,6 +1,6 @@
-# WanderMates Deployment Guide
+# WanderMeets Deployment Guide
 
-This document describes the step-by-step process to deploy the WanderMates application onto production using:
+This document describes the step-by-step process to deploy the WanderMeets application onto production using:
 * **Database:** Railway MySQL
 * **Backend:** Render
 * **Frontend:** Netlify
@@ -22,7 +22,7 @@ This document describes the step-by-step process to deploy the WanderMates appli
 2. Click **New +** and select **Web Service**.
 3. Connect your Git repository containing the project.
 4. Configure the Web Service settings:
-   * **Name:** `wandermates-backend`
+   * **Name:** `wandermeets-backend`
    * **Root Directory:** `backend` (Ensure this is set so Render builds from the backend folder)
    * **Runtime:** `Node`
    * **Build Command:** `npm install`
@@ -32,7 +32,7 @@ This document describes the step-by-step process to deploy the WanderMates appli
    * `PORT`: `10000` (Render binds to this port automatically)
    * `MYSQL_URL`: *Paste the connection URL copied from Railway*
    * `JWT_SECRET`: *A secure random string (e.g. 32-character hexadecimal)*
-   * `FRONTEND_URL`: *The URL of your Netlify frontend (e.g., `https://wandermates.netlify.app`). Multiple domains can be comma-separated.*
+   * `FRONTEND_URL`: *The URL of your Netlify frontend (e.g., `https://wandermeets.netlify.app`). Multiple domains can be comma-separated.*
    * `UPLOAD_PATH`: `/data/uploads`
    * `MAX_FILE_SIZE`: `5242880` (5MB limit)
    * *Optional (SMS verification):* `TWILIO_ACCOUNT_SID`, `TWILIO_AUTH_TOKEN`, `TWILIO_PHONE_NUMBER`, `TWILIO_VERIFY_SERVICE_ID`
@@ -67,8 +67,8 @@ This document describes the step-by-step process to deploy the WanderMates appli
    * **Build Command:** `npm run build`
    * **Publish Directory:** `frontend/build` (Ensure it points to the build output within the frontend folder)
 5. Add the following **Environment Variables** in site settings:
-   * `REACT_APP_API_URL`: *The URL of your Render backend service (e.g., `https://wandermates-backend.onrender.com`)*
-   * `REACT_APP_WS_URL`: *The WebSocket URL of your Render backend service using the `wss` protocol (e.g., `wss://wandermates-backend.onrender.com`)*
+   * `REACT_APP_API_URL`: *The URL of your Render backend service (e.g., `https://wandermeets-backend.onrender.com`)*
+   * `REACT_APP_WS_URL`: *The WebSocket URL of your Render backend service using the `wss` protocol (e.g., `wss://wandermeets-backend.onrender.com`)*
 6. Click **Deploy site**. Netlify will build and deploy the frontend, and the `frontend/public/_redirects` file we created will automatically route all SPA traffic to `index.html` to prevent 404 errors on sub-routes (like `/login` or `/profile`).
 
 ---
@@ -89,8 +89,8 @@ This document describes the step-by-step process to deploy the WanderMates appli
 ### Frontend (`/frontend`)
 | Variable | Description | Example / Recommended Value |
 | :--- | :--- | :--- |
-| `REACT_APP_API_URL` | Base URL of backend REST API | `https://wandermates-backend.onrender.com` |
-| `REACT_APP_WS_URL` | URL of backend WebSocket server | `wss://wandermates-backend.onrender.com` |
+| `REACT_APP_API_URL` | Base URL of backend REST API | `https://wandermeets-backend.onrender.com` |
+| `REACT_APP_WS_URL` | URL of backend WebSocket server | `wss://wandermeets-backend.onrender.com` |
 
 ---
 

@@ -54,7 +54,7 @@ app.get('/health', (req, res) => {
   res.json({ 
     status: 'ok', 
     timestamp: new Date().toISOString(),
-    service: 'WanderMates API'
+    service: 'WanderMeets API'
   });
 });
 
@@ -204,7 +204,7 @@ function broadcast(data, excludeUserId) {
 // Start server
 const PORT = process.env.PORT || 5000;
 server.listen(PORT, () => {
-  console.log('\n🚀 WanderMates Backend Server Started!');
+  console.log('\n🚀 WanderMeets Backend Server Started!');
   console.log(`📡 HTTP API: http://localhost:${PORT}`);
   console.log(`🔌 WebSocket: ws://localhost:${PORT}`);
   console.log(`🌍 Environment: ${process.env.NODE_ENV || 'development'}\n`);

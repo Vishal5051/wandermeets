@@ -1,7 +1,7 @@
 {
-  "name": "wandermates-backend",
+  "name": "wandermeets-backend",
   "version": "1.0.0",
-  "description": "WanderMates Backend API",
+  "description": "WanderMeets Backend API",
   "main": "server.js",
   "scripts": {
     "start": "node server.js",

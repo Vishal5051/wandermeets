@@ -52,10 +52,10 @@ router.post('/verify-email/send-otp', authenticateToken, async (req, res) => {
     const mailOptions = {
       from: process.env.EMAIL_FROM,
       to: email,
-      subject: 'Verify Your WanderMates Email',
+      subject: 'Verify Your WanderMeets Email',
       html: `
         <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; padding: 20px; border: 1px solid #e0e0e0; border-radius: 10px;">
-          <h2 style="color: #2D3436; text-align: center;">WanderMates Verification</h2>
+          <h2 style="color: #2D3436; text-align: center;">WanderMeets Verification</h2>
           <p>Hi there,</p>
           <p>Your one-time password (OTP) to verify your email address is:</p>
           <div style="background-color: #F3F4F6; padding: 20px; text-align: center; font-size: 32px; font-weight: bold; letter-spacing: 5px; color: #6C5CE7; border-radius: 8px;">

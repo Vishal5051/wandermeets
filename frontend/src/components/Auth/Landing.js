@@ -34,7 +34,7 @@ function Landing() {
           transition={{ delay: 0.3, duration: 0.6 }}
           className="landing-text"
         >
-          <h1>WanderMates</h1>
+          <h1>WanderMeets</h1>
           <p>Your Travel Tribe Awaits</p>
         </motion.div>
 

@@ -1,10 +1,10 @@
-# 🚀 WanderMates MVP - Quick Start Guide
+# 🚀 WanderMeets MVP - Quick Start Guide
 
 ## ⚡ 5-Minute Setup (If you have PostgreSQL installed)
 
 ### 1. Create Database (30 seconds)
 ```bash
-psql -U postgres -c "CREATE DATABASE wandermates;"
+psql -U postgres -c "CREATE DATABASE wandermeets;"
 ```
 
 ### 2. Setup Backend (2 minutes)
@@ -46,7 +46,7 @@ Open http://localhost:3000
 ```bash
 brew install postgresql@14 postgis
 brew services start postgresql@14
-createdb wandermates
+createdb wandermeets
 ```
 
 ### Ubuntu/Debian
@@ -54,13 +54,13 @@ createdb wandermates
 sudo apt update
 sudo apt install postgresql postgresql-contrib postgis
 sudo systemctl start postgresql
-sudo -u postgres createdb wandermates
+sudo -u postgres createdb wandermeets
 ```
 
 ### Windows
 1. Download PostgreSQL from https://www.postgresql.org/download/windows/
 2. Run installer (remember the password you set!)
-3. Open pgAdmin 4 and create database 'wandermates'
+3. Open pgAdmin 4 and create database 'wandermeets'
 
 ---
 

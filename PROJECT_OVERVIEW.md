@@ -1,13 +1,13 @@
-# WanderMates MVP - Project Overview
+# WanderMeets MVP - Project Overview
 
 ## 📊 What You're Getting
 
-This is a **complete, working MVP** of the WanderMates social travel platform. Everything is functional and ready to run locally on your machine.
+This is a **complete, working MVP** of the WanderMeets social travel platform. Everything is functional and ready to run locally on your machine.
 
 ### Package Contents
 
 ```
-wandermates-mvp/
+wandermeets-mvp/
 ├── README.md              ← Full documentation
 ├── QUICKSTART.md          ← 5-minute setup guide
 ├── setup.sh               ← Automated setup (Mac/Linux)
@@ -112,7 +112,7 @@ wandermates-mvp/
 - **Real-time:** WebSocket client
 
 ### Design System
-Based on WanderMates design specification:
+Based on WanderMeets design specification:
 - **Colors:** Primary Blue, Ocean Blue, Sunset Orange, Forest Green
 - **Typography:** System fonts (SF Pro / Roboto)
 - **Spacing:** 8pt grid system
@@ -394,7 +394,7 @@ You'll know it's working when:
 
 ---
 
-**Built with ❤️ based on the WanderMates design specification**
+**Built with ❤️ based on the WanderMeets design specification**
 
 Version: 1.0.0 (MVP)
 Created: April 2026

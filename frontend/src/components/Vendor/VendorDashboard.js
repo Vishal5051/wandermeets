@@ -149,7 +149,7 @@ function VendorDashboard({ user }) {
             <div className="vendor-empty">
               <div className="empty-icon"><Package size={48} /></div>
               <h3>Start your journey</h3>
-              <p>Create your first listing to showcase your services to the WanderMates community.</p>
+              <p>Create your first listing to showcase your services to the WanderMeets community.</p>
               <button className="btn-modern btn-modern-primary" onClick={() => navigate('/vendor/listings/new')}>
                 + Create Listing
               </button>

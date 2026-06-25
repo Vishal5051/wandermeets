@@ -88,7 +88,7 @@ function Login({ onLogin }) {
         </div>
 
         <div className="aside-footer">
-          <p>© 2025 WanderMates · Privacy · Terms</p>
+          <p>© 2025 WanderMeets · Privacy · Terms</p>
         </div>
       </aside>
 

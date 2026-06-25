@@ -6,7 +6,7 @@ require('dotenv').config();
 const initDatabase = async () => {
   const connectionString = process.env.DATABASE_URL || process.env.MYSQL_URL;
   let rootConn;
-  const dbName = process.env.MYSQLDATABASE || process.env.DB_NAME || 'wandermates';
+  const dbName = process.env.MYSQLDATABASE || process.env.DB_NAME || 'wandermeets';
 
   if (connectionString) {
     try {
@@ -64,7 +64,7 @@ const initDatabase = async () => {
   }
 
   try {
-    console.log('🚀 Initializing WanderMates MySQL Database...\n');
+    console.log('🚀 Initializing WanderMeets MySQL Database...\n');
 
     // Run schema script
     const schemaPath = path.join(__dirname, '..', 'sql', 'schema.sql');
@@ -76,15 +76,31 @@ const initDatabase = async () => {
     const procPath = path.join(__dirname, '..', 'sql', 'procedures.sql');
     const procSql = fs.readFileSync(procPath, 'utf8');
 
+    // Strip comments to ensure statement execution is clean and drop statements are not filtered out
+    const procSqlCleaned = procSql.replace(/--.*$/gm, '').replace(/\/\*[\s\S]*?\*\//g, '');
+
+    // First, run any standalone statements (USE, DROP) outside DELIMITER blocks to clean up old procedures
+    const outsideBlocks = procSqlCleaned.replace(/DELIMITER\s+\/\/[\s\S]*?DELIMITER\s+;/g, '').trim();
+    if (outsideBlocks) {
+      const stmts = outsideBlocks.split(';').map(s => s.trim()).filter(s => s.length > 5);
+      for (const stmt of stmts) {
+        try {
+          await rootConn.query(stmt);
+        } catch (err) {
+          // ignore
+        }
+      }
+    }
+
     // Extract procedure bodies between DELIMITER // ... DELIMITER ;
-    // Each block contains DROP + CREATE PROCEDURE statements separated by //
+    // Each block contains CREATE PROCEDURE statements
     const regex = /DELIMITER\s+\/\/([\s\S]*?)DELIMITER\s+;/g;
     let match;
     let procCount = 0;
 
-    while ((match = regex.exec(procSql)) !== null) {
+    while ((match = regex.exec(procSqlCleaned)) !== null) {
       const block = match[1].trim();
-      // Split on // to get individual statements (DROP and CREATE pairs)
+      // Split on // to get individual statements
       const statements = block.split(/\/\//).map(s => s.trim()).filter(s => s.length > 0);
       for (const stmt of statements) {
         try {
@@ -92,19 +108,6 @@ const initDatabase = async () => {
           if (stmt.toUpperCase().includes('CREATE PROCEDURE')) procCount++;
         } catch (err) {
           console.warn('⚠️  Warning:', err.message.substring(0, 100));
-        }
-      }
-    }
-
-    // Also run any standalone statements (USE, DROP) outside DELIMITER blocks
-    const outsideBlocks = procSql.replace(/DELIMITER\s+\/\/[\s\S]*?DELIMITER\s+;/g, '').trim();
-    if (outsideBlocks) {
-      const stmts = outsideBlocks.split(';').map(s => s.trim()).filter(s => s.length > 5 && !s.startsWith('--'));
-      for (const stmt of stmts) {
-        try {
-          await rootConn.query(stmt);
-        } catch (err) {
-          // ignore
         }
       }
     }
