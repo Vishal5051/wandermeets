@@ -3,7 +3,7 @@
 -- CRUD Operations for all entities
 -- =============================================
 
-USE wandermates;
+-- USE wandermates;
 
 -- =============================================
 -- AUTH / USER PROCEDURES
@@ -1417,5 +1417,106 @@ BEGIN
   JOIN travel_packages tp ON tp.id = b.package_id
   JOIN users u ON u.id = b.user_id
   WHERE b.id = p_booking_id;
+END //
+DELIMITER ;
+
+-- =============================================
+-- MIGRATION & SAFETY PROCEDURES
+-- =============================================
+
+-- Procedure to verify email
+DROP PROCEDURE IF EXISTS sp_verify_email;
+DELIMITER //
+CREATE PROCEDURE sp_verify_email(
+    IN p_user_id INT,
+    IN p_email VARCHAR(255)
+)
+BEGIN
+    UPDATE users 
+    SET email_verified = 1, 
+        trust_score = LEAST(100, trust_score + 10) 
+    WHERE id = p_user_id AND email = p_email;
+    
+    SELECT 'Email verified successfully' AS message;
+END //
+DELIMITER ;
+
+-- Stored Procedures for Emergency Contacts
+DROP PROCEDURE IF EXISTS sp_get_emergency_contacts;
+DELIMITER //
+CREATE PROCEDURE sp_get_emergency_contacts(
+  IN p_user_id INT
+)
+BEGIN
+  SELECT id, name, relationship, phone_number, created_at
+  FROM emergency_contacts
+  WHERE user_id = p_user_id
+  ORDER BY created_at DESC;
+END //
+DELIMITER ;
+
+DROP PROCEDURE IF EXISTS sp_add_emergency_contact;
+DELIMITER //
+CREATE PROCEDURE sp_add_emergency_contact(
+  IN p_user_id INT,
+  IN p_name VARCHAR(255),
+  IN p_relationship VARCHAR(255),
+  IN p_phone VARCHAR(20)
+)
+BEGIN
+  INSERT INTO emergency_contacts (user_id, name, relationship, phone_number)
+  VALUES (p_user_id, p_name, p_relationship, p_phone);
+  
+  -- Return updated list
+  CALL sp_get_emergency_contacts(p_user_id);
+END //
+DELIMITER ;
+
+DROP PROCEDURE IF EXISTS sp_delete_emergency_contact;
+DELIMITER //
+CREATE PROCEDURE sp_delete_emergency_contact(
+  IN p_contact_id INT,
+  IN p_user_id INT
+)
+BEGIN
+  DELETE FROM emergency_contacts 
+  WHERE id = p_contact_id AND user_id = p_user_id;
+  
+  -- Return updated list
+  CALL sp_get_emergency_contacts(p_user_id);
+END //
+DELIMITER ;
+
+-- Update SOS Procedure to LOG every event
+DROP PROCEDURE IF EXISTS sp_send_sos;
+DELIMITER //
+CREATE PROCEDURE sp_send_sos(
+  IN p_user_id INT,
+  IN p_latitude DECIMAL(10, 8),
+  IN p_longitude DECIMAL(11, 8),
+  IN p_message TEXT
+)
+BEGIN
+  -- Insert into logs for verifiability
+  INSERT INTO sos_logs (user_id, latitude, longitude, message)
+  VALUES (p_user_id, p_latitude, p_longitude, p_message);
+  
+  -- Return success acknowledge
+  SELECT 'SOS Logged & Signal Received' AS status;
+END //
+DELIMITER ;
+
+-- Procedure to get user's SOS history
+DROP PROCEDURE IF EXISTS sp_get_user_sos_history;
+DELIMITER //
+CREATE PROCEDURE sp_get_user_sos_history(
+  IN p_user_id INT
+)
+BEGIN
+  SELECT id, latitude, longitude, message, status, created_at
+  FROM sos_logs
+  WHERE user_id = p_user_id
+  ORDER BY created_at DESC
+  LIMIT 5;
 END //
 DELIMITER ;

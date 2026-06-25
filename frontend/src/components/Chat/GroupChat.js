@@ -42,7 +42,7 @@ function GroupChat({ type, id, user }) {
 
   const setupWebSocket = () => {
     const protocol = window.location.protocol === 'https:' ? 'wss:' : 'ws:';
-    const socketUrl = `${protocol}//${window.location.hostname}:5000`;
+    const socketUrl = process.env.REACT_APP_WS_URL || `${protocol}//${window.location.hostname}:5000`;
     ws.current = new WebSocket(socketUrl);
 
     ws.current.onopen = () => {
@@ -100,7 +100,7 @@ function GroupChat({ type, id, user }) {
                 {!isMe && (
                   <div className="sender-avatar">
                     {m.sender_photo ? (
-                      <img src={`http://localhost:5000${m.sender_photo}`} alt="avatar" />
+                      <img src={`${process.env.REACT_APP_API_URL || 'http://localhost:5000'}${m.sender_photo}`} alt="avatar" />
                     ) : (
                       <div className="avatar-placeholder"><User size={12} /></div>
                     )}

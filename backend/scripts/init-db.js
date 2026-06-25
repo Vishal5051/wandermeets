@@ -4,14 +4,64 @@ const path = require('path');
 require('dotenv').config();
 
 const initDatabase = async () => {
-  // Connect without database first to create it
-  const rootConn = await mysql.createConnection({
-    host: process.env.DB_HOST || 'localhost',
-    port: process.env.DB_PORT || 3306,
-    user: process.env.DB_USER || 'root',
-    password: process.env.DB_PASSWORD || '',
-    multipleStatements: true,
-  });
+  const connectionString = process.env.DATABASE_URL || process.env.MYSQL_URL;
+  let rootConn;
+  const dbName = process.env.MYSQLDATABASE || process.env.DB_NAME || 'wandermates';
+
+  if (connectionString) {
+    try {
+      const url = require('url');
+      const parsed = url.parse(connectionString);
+      const auth = parsed.auth ? parsed.auth.split(':') : [];
+      rootConn = await mysql.createConnection({
+        host: parsed.hostname,
+        port: parsed.port || 3306,
+        database: parsed.pathname ? parsed.pathname.substring(1) : undefined,
+        user: auth[0],
+        password: auth[1],
+        ssl: {
+          rejectUnauthorized: false
+        },
+        multipleStatements: true,
+      });
+      console.log(`📡 Connected to MySQL database via connection string with SSL.`);
+    } catch (err) {
+      console.error('Failed to connect via connection URI parsing, trying direct connection string:', err.message);
+      let uri = connectionString;
+      if (uri.includes('?')) {
+        if (!uri.includes('multipleStatements=')) {
+          uri += '&multipleStatements=true';
+        }
+      } else {
+        uri += '?multipleStatements=true';
+      }
+      rootConn = await mysql.createConnection(uri);
+    }
+  } else {
+    try {
+      // Connect without database first to try to create it (local development)
+      rootConn = await mysql.createConnection({
+        host: process.env.MYSQLHOST || process.env.DB_HOST || 'localhost',
+        port: process.env.MYSQLPORT || process.env.DB_PORT || 3306,
+        user: process.env.MYSQLUSER || process.env.DB_USER || 'root',
+        password: process.env.MYSQLPASSWORD || process.env.DB_PASSWORD || '',
+        multipleStatements: true,
+      });
+      console.log(`📡 Connected to MySQL host. Creating database "${dbName}" if not exists...`);
+      await rootConn.query(`CREATE DATABASE IF NOT EXISTS \`${dbName}\` CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci`);
+      await rootConn.query(`USE \`${dbName}\``);
+    } catch (err) {
+      console.log(`⚠️  Could not connect without database: ${err.message}. Trying direct connection to "${dbName}"...`);
+      rootConn = await mysql.createConnection({
+        host: process.env.MYSQLHOST || process.env.DB_HOST || 'localhost',
+        port: process.env.MYSQLPORT || process.env.DB_PORT || 3306,
+        user: process.env.MYSQLUSER || process.env.DB_USER || 'root',
+        password: process.env.MYSQLPASSWORD || process.env.DB_PASSWORD || '',
+        database: dbName,
+        multipleStatements: true,
+      });
+    }
+  }
 
   try {
     console.log('🚀 Initializing WanderMates MySQL Database...\n');

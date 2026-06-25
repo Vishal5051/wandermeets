@@ -2,15 +2,20 @@
 -- WanderMates Database Schema (MySQL)
 -- =============================================
 
-CREATE DATABASE IF NOT EXISTS wandermates
-  CHARACTER SET utf8mb4
-  COLLATE utf8mb4_unicode_ci;
+-- CREATE DATABASE IF NOT EXISTS wandermates
+--   CHARACTER SET utf8mb4
+--   COLLATE utf8mb4_unicode_ci;
 
-USE wandermates;
+-- USE wandermates;
 
 -- =============================================
 -- DROP EXISTING TABLES (for clean re-init)
 -- =============================================
+DROP TABLE IF EXISTS group_messages;
+DROP TABLE IF EXISTS group_chats;
+DROP TABLE IF EXISTS user_email_verifications;
+DROP TABLE IF EXISTS sos_logs;
+DROP TABLE IF EXISTS emergency_contacts;
 DROP TABLE IF EXISTS user_reports;
 DROP TABLE IF EXISTS messages;
 DROP TABLE IF EXISTS conversations;
@@ -387,6 +392,64 @@ CREATE TABLE IF NOT EXISTS user_reviews (
   created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
   CONSTRAINT fk_review_user FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE,
   CONSTRAINT fk_review_reviewer FOREIGN KEY (reviewer_id) REFERENCES users(id) ON DELETE CASCADE
+) ENGINE=InnoDB;
+
+-- =============================================
+-- AUXILIARY / MIGRATION TABLES
+-- =============================================
+
+-- Table to store email verification codes
+CREATE TABLE IF NOT EXISTS user_email_verifications (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    user_id INT NOT NULL,
+    email VARCHAR(255) NOT NULL,
+    code VARCHAR(6) NOT NULL,
+    expires_at DATETIME NOT NULL,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    CONSTRAINT fk_email_ver_user FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
+) ENGINE=InnoDB;
+
+-- Table to map activities/waves to chat rooms
+CREATE TABLE IF NOT EXISTS group_chats (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    type ENUM('activity', 'wave') NOT NULL,
+    reference_id INT NOT NULL,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    UNIQUE KEY uq_group_chat (type, reference_id)
+) ENGINE=InnoDB;
+
+-- Table to store actual messages
+CREATE TABLE IF NOT EXISTS group_messages (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    group_chat_id INT NOT NULL,
+    sender_id INT NOT NULL,
+    message TEXT NOT NULL,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    CONSTRAINT fk_group_msg_chat FOREIGN KEY (group_chat_id) REFERENCES group_chats(id) ON DELETE CASCADE,
+    CONSTRAINT fk_group_msg_sender FOREIGN KEY (sender_id) REFERENCES users(id) ON DELETE CASCADE
+) ENGINE=InnoDB;
+
+-- Create Emergency Contacts Table (used by safety routes)
+CREATE TABLE IF NOT EXISTS emergency_contacts (
+  id INT AUTO_INCREMENT PRIMARY KEY,
+  user_id INT NOT NULL,
+  name VARCHAR(255) NOT NULL,
+  relationship VARCHAR(255) NOT NULL,
+  phone_number VARCHAR(20) NOT NULL,
+  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  CONSTRAINT fk_emerg_contacts_user FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
+) ENGINE=InnoDB;
+
+-- Create SOS Logs Table (used by safety routes)
+CREATE TABLE IF NOT EXISTS sos_logs (
+  id INT AUTO_INCREMENT PRIMARY KEY,
+  user_id INT NOT NULL,
+  latitude DECIMAL(10, 8),
+  longitude DECIMAL(11, 8),
+  message TEXT,
+  status VARCHAR(50) DEFAULT 'received',
+  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  CONSTRAINT fk_sos_logs_user FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
 ) ENGINE=InnoDB;
 
 -- =============================================

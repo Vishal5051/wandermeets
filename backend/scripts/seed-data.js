@@ -3,11 +3,43 @@ const mysql = require('mysql2/promise');
 require('dotenv').config({ path: require('path').join(__dirname, '..', '.env') });
 
 (async () => {
-  const conn = await mysql.createConnection({
-    host: process.env.DB_HOST, port: process.env.DB_PORT,
-    user: process.env.DB_USER, password: process.env.DB_PASSWORD,
-    database: process.env.DB_NAME, multipleStatements: true
-  });
+  const connectionString = process.env.DATABASE_URL || process.env.MYSQL_URL;
+  let conn;
+  if (connectionString) {
+    try {
+      const url = require('url');
+      const parsed = url.parse(connectionString);
+      const auth = parsed.auth ? parsed.auth.split(':') : [];
+      conn = await mysql.createConnection({
+        host: parsed.hostname,
+        port: parsed.port || 3306,
+        database: parsed.pathname ? parsed.pathname.substring(1) : undefined,
+        user: auth[0],
+        password: auth[1],
+        ssl: {
+          rejectUnauthorized: false
+        },
+        multipleStatements: true
+      });
+    } catch (err) {
+      console.error('Failed to parse connection string for seeding, trying direct URL connection:', err.message);
+      let uri = connectionString;
+      if (uri.includes('?')) {
+        if (!uri.includes('multipleStatements=')) {
+          uri += '&multipleStatements=true';
+        }
+      } else {
+        uri += '?multipleStatements=true';
+      }
+      conn = await mysql.createConnection(uri);
+    }
+  } else {
+    conn = await mysql.createConnection({
+      host: process.env.DB_HOST, port: process.env.DB_PORT,
+      user: process.env.DB_USER, password: process.env.DB_PASSWORD,
+      database: process.env.DB_NAME, multipleStatements: true
+    });
+  }
 
   const hash = await bcrypt.hash('Test@1234', 10);
 
