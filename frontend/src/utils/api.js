@@ -35,6 +35,10 @@ api.interceptors.response.use(
       localStorage.removeItem('user');
       window.location.href = '/login';
     }
+    // Format validation errors (errors array) to a single error string for UI compatibility
+    if (error.response?.data && error.response.data.errors && !error.response.data.error) {
+      error.response.data.error = error.response.data.errors.map(e => e.msg).join(', ');
+    }
     return Promise.reject(error);
   }
 );
