@@ -2,7 +2,10 @@ import React from 'react';
 import { motion } from 'framer-motion';
 import { MapPin, Trash2, Compass } from 'lucide-react';
 
-const API_URL = process.env.REACT_APP_API_URL || 'http://localhost:5000';
+const API_URL = process.env.REACT_APP_API_URL || 
+  (typeof window !== 'undefined' && (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1')
+    ? 'http://localhost:5000'
+    : 'https://wandermeets-backend.onrender.com');
 
 function MemoryLine({ pins, onDeletePin }) {
   if (!pins || pins.length === 0) return null;

@@ -3,6 +3,11 @@ import api from '../../utils/api';
 import { Send, User, Clock, ShieldCheck } from 'lucide-react';
 import './GroupChat.css';
 
+const API_URL = process.env.REACT_APP_API_URL || 
+  (typeof window !== 'undefined' && (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1')
+    ? 'http://localhost:5000'
+    : 'https://wandermeets-backend.onrender.com');
+
 function GroupChat({ type, id, user }) {
   const [messages, setMessages] = useState([]);
   const [text, setText] = useState('');
@@ -42,7 +47,11 @@ function GroupChat({ type, id, user }) {
 
   const setupWebSocket = () => {
     const protocol = window.location.protocol === 'https:' ? 'wss:' : 'ws:';
-    const socketUrl = process.env.REACT_APP_WS_URL || `${protocol}//${window.location.hostname}:5000`;
+    const isLocal = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1';
+    const socketUrl = process.env.REACT_APP_WS_URL || 
+      (isLocal 
+        ? `${protocol}//${window.location.hostname}:5000` 
+        : 'wss://wandermeets-backend.onrender.com');
     ws.current = new WebSocket(socketUrl);
 
     ws.current.onopen = () => {
@@ -100,7 +109,7 @@ function GroupChat({ type, id, user }) {
                 {!isMe && (
                   <div className="sender-avatar">
                     {m.sender_photo ? (
-                      <img src={`${process.env.REACT_APP_API_URL || 'http://localhost:5000'}${m.sender_photo}`} alt="avatar" />
+                      <img src={`${API_URL}${m.sender_photo}`} alt="avatar" />
                     ) : (
                       <div className="avatar-placeholder"><User size={12} /></div>
                     )}
