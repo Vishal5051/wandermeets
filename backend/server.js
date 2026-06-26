@@ -50,7 +50,7 @@ app.use((req, res, next) => {
 });
 
 // Health check
-app.get('/health', (req, res) => {
+app.get(['/health', '/health '], (req, res) => {
   res.json({ 
     status: 'ok', 
     timestamp: new Date().toISOString(),
