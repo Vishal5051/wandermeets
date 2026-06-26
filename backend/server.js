@@ -58,6 +58,16 @@ app.get(['/health', '/health '], (req, res) => {
   });
 });
 
+// Root endpoint
+app.get('/', (req, res) => {
+  res.json({
+    message: 'Welcome to the WanderMeets API',
+    status: 'online',
+    version: '1.0.0',
+    healthCheck: '/health'
+  });
+});
+
 // API Routes
 app.use('/api/auth', authRoutes);
 app.use('/api/activities', activityRoutes);
