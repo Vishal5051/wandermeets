@@ -19,7 +19,7 @@ A complete working MVP of the WanderMeets social travel platform with real-time 
 
 **Backend:**
 - Node.js + Express
-- PostgreSQL with PostGIS (geographic queries)
+- MySQL 8.x (relational tables & stored procedures)
 - WebSocket for real-time updates
 - JWT authentication
 - RESTful API
@@ -36,38 +36,40 @@ A complete working MVP of the WanderMeets social travel platform with real-time 
 Before running this project, make sure you have:
 
 1. **Node.js** (v16 or higher) - [Download](https://nodejs.org/)
-2. **PostgreSQL** (v12 or higher) - [Download](https://www.postgresql.org/download/)
+2. **MySQL** (v8.x or higher) - [Download](https://dev.mysql.com/downloads/)
 3. **npm** or **yarn** package manager
 
 ## 🛠️ Installation & Setup
 
-### Step 1: Install PostgreSQL
+### Step 1: Install & Run MySQL
+
+Ensure MySQL is running on your machine.
 
 #### macOS:
 ```bash
-brew install postgresql@14
-brew services start postgresql@14
+brew install mysql
+brew services start mysql
 ```
 
 #### Ubuntu/Debian:
 ```bash
 sudo apt update
-sudo apt install postgresql postgresql-contrib postgis
-sudo systemctl start postgresql
+sudo apt install mysql-server
+sudo systemctl start mysql
 ```
 
 #### Windows:
-Download and install from [postgresql.org](https://www.postgresql.org/download/windows/)
+Download and install the MySQL Installer from [dev.mysql.com](https://dev.mysql.com/downloads/installer/).
 
 ### Step 2: Create Database
 
-```bash
-# Login to PostgreSQL
-psql -U postgres
+```sql
+-- Connect to MySQL CLI:
+mysql -u root -p
 
-# In PostgreSQL shell:
+-- In the MySQL shell:
 CREATE DATABASE wandermeets;
-\q
+EXIT;
 ```
 
 ### Step 3: Configure Environment Variables
@@ -81,10 +83,10 @@ cp .env.example .env
 Edit `backend/.env` with your database credentials:
 ```env
 DB_HOST=localhost
-DB_PORT=5432
+DB_PORT=3306
 DB_NAME=wandermeets
-DB_USER=postgres
-DB_PASSWORD=your_postgres_password
+DB_USER=root
+DB_PASSWORD=your_mysql_root_password
 
 PORT=5000
 JWT_SECRET=change-this-to-a-random-secret-key
@@ -287,31 +289,12 @@ wandermeets-mvp/
 
 ### Database Connection Issues
 ```bash
-# Check if PostgreSQL is running
-sudo systemctl status postgresql  # Linux
+# Check if MySQL is running
+sudo systemctl status mysql  # Linux
 brew services list  # macOS
 
 # Test connection
-psql -U postgres -d wandermeets
-```
-
-### Port Already in Use
-```bash
-# Backend (Port 5000)
-lsof -ti:5000 | xargs kill -9
-
-# Frontend (Port 3000)
-lsof -ti:3000 | xargs kill -9
-```
-
-### PostGIS Extension Error
-```bash
-# Install PostGIS
-sudo apt install postgis  # Ubuntu/Debian
-brew install postgis  # macOS
-
-# In PostgreSQL:
-CREATE EXTENSION postgis;
+mysql -u root -p -d wandermeets
 ```
 
 ### Node Modules Issues
