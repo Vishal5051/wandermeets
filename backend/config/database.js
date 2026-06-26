@@ -20,7 +20,7 @@ if (connectionString) {
         rejectUnauthorized: false
       },
       waitForConnections: true,
-      connectionLimit: 20,
+      connectionLimit: 10,
       queueLimit: 0,
       multipleStatements: true,
     });
