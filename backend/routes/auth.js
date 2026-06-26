@@ -16,6 +16,7 @@ router.post('/register', [
 ], async (req, res) => {
   const errors = validationResult(req);
   if (!errors.isEmpty()) {
+    console.log('⚠️ Registration Validation Failed:', errors.array());
     return res.status(400).json({ error: errors.array().map(e => e.msg).join(', ') });
   }
 
@@ -24,7 +25,8 @@ router.post('/register', [
   try {
     // Check if user already exists
     const existing = await db.callProc('sp_check_user_exists', [email, username]);
-    if (existing.length > 0) {
+    if (existing && existing.length > 0) {
+      console.log(`⚠️ Registration Conflict: User with email "${email}" or username "${username}" already exists.`);
       return res.status(400).json({ error: 'Email or username already exists' });
     }
 
